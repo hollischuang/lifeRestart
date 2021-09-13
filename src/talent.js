@@ -90,6 +90,10 @@ class Talent {
             return null;
         return { effect, grade, name, description };
     }
+
+    talentCheat(){
+        return this.#talents;
+    }
 }
 
 export default Talent;

@@ -1169,5 +1169,15 @@
         "name": "转世重修",
         "description": "渡劫失败重生",
         "grade": 3
+    },
+    "1135": {
+        "id": 1135,
+        "name": "不灭金身",
+        "description": "体质小于1时体质+10且死亡后会复活",
+        "condition": "STR<1",
+        "grade": 3,
+        "effect": {
+            "STR": 10
+        }
     }
 }

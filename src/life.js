@@ -118,6 +118,10 @@ class Life {
     exclusive(talents, exclusive) {
         return this.#talent.exclusive(talents, exclusive);
     }
+
+    talentCheat(){
+        return this.#talent.talentCheat();
+    }
 }
 
 export default Life;

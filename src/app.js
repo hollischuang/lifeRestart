@@ -81,12 +81,62 @@ class App{
             <button id="random" class="mainbtn" style="top: 50%;">10连抽！</button>
             <ul id="talents" class="selectlist"></ul>
             <button id="next" class="mainbtn" style="top:auto; bottom:0.1em">请选择3个</button>
+            <button id="cheat" class="sponsor" style="margin:30px">神选之子</button>
         </div>
         `);
 
         const createTalent = ({ grade, name, description }) => {
-            return $(`<li class="grade${grade}b">${name}（${description}）</li>`)
+            return $(`<li id="tId_${id}" class="grade${grade}b">${name}（${description}）</li>`);
         };
+
+        talentPage
+            .find('#cheat')
+            .click(()=>{
+                talentPage.find('#cheat').hide();
+                const talent = this.#life.talentCheat()[1135];
+                const talent2 = this.#life.talentCheat()[1048];
+                const ul = talentPage.find('#talents');
+                ul.children()[0].remove();
+                ul.find('#tId_1048').remove();
+                const li = createTalent(talent);
+                ul.append(li);
+
+                li.click(()=>{
+                    if(li.hasClass('selected')) {
+                        li.removeClass('selected')
+                        this.#talentSelected.delete(talent);
+                        this.#talentSelected.delete(talent2);
+                        if(this.#talentSelected.size<3) {
+                            talentPage.find('#next').text('请选择3个')
+                        }
+                    } else {
+                        if(this.#talentSelected.size==3) {
+                            this.hint('只能选3个天赋');
+                            return;
+                        }
+                        this.hint(`选择【不灭金身】的同时会附带【神秘的小盒子】，占用两个天赋位`);
+                        const exclusive = this.#life.exclusive(
+                            Array.from(this.#talentSelected).map(({id})=>id),
+                            talent.id
+                        );
+                        if(exclusive != null) {
+                            for(const { name, id } of this.#talentSelected) {
+                                if(id == exclusive) {
+                                    this.hint(`与已选择的天赋【${name}】冲突`);
+                                    return;
+                                }
+                            }
+                            return;
+                        }
+                        li.addClass('selected');
+                        this.#talentSelected.add(talent);
+                        this.#talentSelected.add(talent2);
+                        if(this.#talentSelected.size==3) {
+                            talentPage.find('#next').text('开始新人生')
+                        }
+                    }
+                });
+            });
 
         talentPage
             .find('#random')
@@ -95,6 +145,9 @@ class App{
                 const ul = talentPage.find('#talents');
                 this.#life.talentRandom()
                     .forEach(talent=>{
+                        if(talent.id==1135){
+                            return true;
+                        }
                         const li = createTalent(talent);
                         ul.append(li);
                         li.click(()=>{
@@ -132,6 +185,9 @@ class App{
                         });
                     });
             });
+
+        talentPage.find('#next').show();
+        talentPage.find('#cheat').show();
 
         talentPage
             .find('#next')
@@ -398,6 +454,7 @@ class App{
                 clear: ()=>{
                     talentPage.find('ul.selectlist').empty();
                     talentPage.find('#random').show();
+                    talentPage.find('#cheat').hide();
                     this.#totalMax = 20;
                 },
             },
