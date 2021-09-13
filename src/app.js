@@ -85,8 +85,8 @@ class App{
         </div>
         `);
 
-        const createTalent = ({ grade, name, description }) => {
-            return $(`<li id="tId_${id}" class="grade${grade}b">${name}（${description}）</li>`);
+        const createTalent = ({ id, grade, name, description }) => {
+            return $(`<li id="tId_${id}" class="grade${grade}b">${name}（${description}）</li>`)
         };
 
         talentPage
